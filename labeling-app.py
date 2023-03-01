@@ -7,6 +7,7 @@ from shutil import copy2
 
 # initialize labels
 labels = {0: "Label 1", 1: "Label 2", 2: "Label 3", 3: "Label 4", 4: "Label 5"}
+labels_keys = labels.keys()
 
 # create sidebar to upload the csv file and display the possible labels
 st.title("Data Labeling Tool")
@@ -71,7 +72,9 @@ if uploaded_file is not None:
         # check if column 'Label' contains null values if "yes" print warning else continue
         if df_update['Label'].isnull().any():
             st.warning('Bitte weisen Sie vor der Speicherung jedem Sample ein Label zu.')
-        else:
+        elif ~df_update['Label'].isin(labels_keys).any():
+            st.warning('Bitte verwenden Sie nur gültige Labels. (siehe Sidebar)')
+        else:        
             # Convert the Label column to integer data type 
             df_update['Label'] = df_update['Label'].astype(int)
 
